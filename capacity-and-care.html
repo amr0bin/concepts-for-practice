@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacity & Care — Living with Chronic Illness</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #b8d8e8;
+    --blue-mid: #7ab8d4;
+    --blue-dark: #3a7a9c;
+    --blue-deep: #1e4d63;
+    --pink: #f2c4ce;
+    --pink-mid: #e8899a;
+    --pink-dark: #c4526a;
+    --pink-deep: #8a2d42;
+    --yellow: #fef3b4;
+    --yellow-mid: #f9e06a;
+    --yellow-dark: #d4b82a;
+    --yellow-deep: #7a6200;
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --text: #2a2620;
+    --text-muted: #7a7268;
+    --text-light: #b0a898;
+    --border: rgba(42,38,32,0.1);
+    --shadow: rgba(42,38,32,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.6rem;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .header h1 em {
+    color: var(--pink-dark);
+    font-style: italic;
+  }
+
+  .header p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Tab nav */
+  .tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 44px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 4px;
+    width: fit-content;
+    margin: 0 auto 44px;
+  }
+
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 36px;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: transparent;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+  }
+
+  .tab-btn.active {
+    background: var(--text);
+    color: white;
+  }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ---- BEFORE panel ---- */
+  .before-container {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .before-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--blue-dark);
+    margin-bottom: 8px;
+  }
+
+  .before-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+  }
+
+  .equation-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .eq-block {
+    background: var(--blue);
+    border-radius: 14px;
+    padding: 20px 28px;
+    min-width: 140px;
+  }
+
+  .eq-block.pink { background: var(--pink); }
+  .eq-block.yellow { background: var(--yellow); }
+
+  .eq-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--blue-deep);
+    margin-bottom: 4px;
+  }
+
+  .eq-block.pink .eq-label { color: var(--pink-deep); }
+  .eq-block.yellow .eq-label { color: var(--yellow-deep); }
+
+  .eq-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--blue-deep);
+  }
+
+  .eq-block.pink .eq-value { color: var(--pink-deep); }
+  .eq-block.yellow .eq-value { color: var(--yellow-deep); }
+
+  .eq-op {
+    font-size: 1.8rem;
+    color: var(--text-light);
+    font-weight: 300;
+  }
+
+  .before-note {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Health bar */
+  .health-track {
+    background: #f0eeea;
+    border-radius: 8px;
+    height: 16px;
+    margin: 16px 0 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .health-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--blue-mid), var(--blue));
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+
+  .health-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: white;
+    opacity: 0.5;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ---- AFTER panel ---- */
+  .after-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  @media (max-width: 680px) {
+    .after-layout { grid-template-columns: 1fr; }
+  }
+
+  /* Capacity meter */
+  .capacity-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 28px;
+    text-align: center;
+    grid-column: 1 / -1;
+  }
+
+  .capacity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .capacity-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .capacity-pct {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--pink-dark);
+  }
+
+  .capacity-track {
+    background: #f0eeea;
+    border-radius: 10px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .capacity-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--pink-mid), var(--pink));
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .capacity-ghost {
+    position: absolute;
+    top: 0; right: 0;
+    height: 100%;
+    width: 20%;
+    border-radius: 0 10px 10px 0;
+    border: 2px dashed var(--text-light);
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 3px,
+      rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 6px
+    );
+  }
+
+  .capacity-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: var(--text-light);
+  }
+
+  /* Charger */
+  .charger-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    grid-column: 1 / -1;
+  }
+
+  .charger-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .charger-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--yellow);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .charger-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--yellow-deep);
+  }
+
+  .charger-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* Charging slot */
+  .charging-slot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--yellow);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    color: var(--yellow-deep);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .slot-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--yellow-dark);
+    animation: pulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .charger-info {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* Battery grid */
+  .batteries-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 28px;
+    grid-column: 1 / -1;
+  }
+
+  .batteries-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .batteries-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+  }
+
+  .batteries-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .battery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 500px) {
+    .battery-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Individual battery */
+  .battery-item {
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    padding: 16px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    background: white;
+    user-select: none;
+  }
+
+  .battery-item:hover {
+    border-color: var(--blue-mid);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+
+  .battery-item.charging {
+    border-color: var(--yellow-dark);
+    background: #fffdf0;
+  }
+
+  .battery-item.critical {
+    border-color: var(--pink-mid);
+    background: #fff5f7;
+  }
+
+  .battery-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .battery-emoji {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .battery-charge-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: var(--blue);
+    color: var(--blue-deep);
+  }
+
+  .battery-charge-badge.low {
+    background: var(--pink);
+    color: var(--pink-deep);
+  }
+
+  .battery-charge-badge.charging {
+    background: var(--yellow);
+    color: var(--yellow-deep);
+  }
+
+  .battery-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  /* Battery visual */
+  .battery-visual {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .battery-body {
+    flex: 1;
+    background: #f0eeea;
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .battery-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+  }
+
+  .battery-cap {
+    width: 4px;
+    height: 6px;
+    background: var(--text-light);
+    border-radius: 0 2px 2px 0;
+    flex-shrink: 0;
+  }
+
+  .battery-drain {
+    font-size: 0.68rem;
+    color: var(--text-light);
+  }
+
+  .drain-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .charge-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .charge-btn:hover {
+    background: var(--yellow);
+    border-color: var(--yellow-dark);
+    color: var(--yellow-deep);
+  }
+
+  .charge-btn.active {
+    background: var(--yellow);
+    border-color: var(--yellow-dark);
+    color: var(--yellow-deep);
+  }
+
+  /* Insight card */
+  .insight-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 28px;
+    grid-column: 1 / -1;
+  }
+
+  .insight-header {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .insight-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .insight-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  /* Reflection panel */
+  .reflection-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 36px 40px;
+  }
+
+  .reflection-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .reflection-block {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .reflection-block:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .reflection-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .reflection-text h3 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .reflection-text p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* Tick animation */
+  @keyframes chargeAnim {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+  }
+
+  .charging-shimmer {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 30%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: chargeAnim 1.2s ease-in-out infinite;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>Capacity &amp; <em>Care</em></h1>
+    <p>My honest map of life before and after chronic illness — and the careful, ongoing art of keeping my batteries charged.</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('before')">Before illness</button>
+    <button class="tab-btn" onclick="showTab('after')">After illness</button>
+    <button class="tab-btn" onclick="showTab('reflection')">On acceptance</button>
+  </div>
+
+  <!-- ====== BEFORE ====== -->
+  <div id="tab-before" class="panel active">
+    <div class="before-container">
+      <div class="before-title">When my effort met outcome directly</div>
+      <div class="before-subtitle">My health was a constant, not a variable. Effort translated predictably into outcome.</div>
+
+      <div class="equation-row">
+        <div class="eq-block blue">
+          <div class="eq-label">Capacity</div>
+          <div class="eq-value">100%</div>
+        </div>
+        <div class="eq-op">×</div>
+        <div class="eq-block pink">
+          <div class="eq-label">Effort</div>
+          <div class="eq-value">yours</div>
+        </div>
+        <div class="eq-op">=</div>
+        <div class="eq-block yellow">
+          <div class="eq-label">Outcome</div>
+          <div class="eq-value">predictable</div>
+        </div>
+      </div>
+
+      <div style="max-width: 400px; margin: 0 auto 20px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted); margin-bottom:6px;">
+          <span>Overall capacity</span>
+          <span style="font-weight:500; color:var(--blue-dark)">100%</span>
+        </div>
+        <div class="health-track">
+          <div class="health-fill" style="width:100%"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-light); margin-top:4px;">
+          <span>No management required</span>
+          <span>Coincidental good health</span>
+        </div>
+      </div>
+
+      <p class="before-note">My health was invisible. It didn't need to be tended. Effort was the only variable that mattered — and it mapped cleanly onto outcomes.</p>
+    </div>
+  </div>
+
+  <!-- ====== AFTER ====== -->
+  <div id="tab-after" class="panel">
+    <div class="after-layout">
+
+      <!-- Capacity meter -->
+      <div class="capacity-card">
+        <div class="capacity-header">
+          <span class="capacity-label">Maximum available capacity</span>
+          <span class="capacity-pct" id="capacity-display">—</span>
+        </div>
+        <div class="capacity-track">
+          <div class="capacity-fill" id="capacity-fill" style="width:0%"></div>
+          <div class="capacity-ghost" title="The 20% I can no longer access"></div>
+        </div>
+        <div class="capacity-labels">
+          <span>0%</span>
+          <span style="color:var(--pink-dark); font-weight:500">80% ceiling — even on perfect days</span>
+          <span>Pre-illness 100%</span>
+        </div>
+        <div style="margin-top:14px; font-size:0.8rem; color:var(--text-muted); font-style:italic;">
+          The hatched zone to the right is not laziness. It is the honest geography of my changed body.
+        </div>
+      </div>
+
+      <!-- Charger -->
+      <div class="charger-card">
+        <div class="charger-header">
+          <div class="charger-icon">⚡</div>
+          <div>
+            <div class="charger-title">The single charger</div>
+            <div class="charger-sub">One recovery device. My six batteries competing for it.</div>
+          </div>
+        </div>
+        <div class="charging-slot" id="charging-slot">
+          <div class="slot-pulse"></div>
+          <span id="charging-name">Select a battery below to charge it →</span>
+        </div>
+        <div class="charger-info" id="charger-info">Each of my levers of influence runs on its own battery. Only one can charge at a time. I choose carefully.</div>
+      </div>
+
+      <!-- Batteries -->
+      <div class="batteries-card">
+        <div class="batteries-header">
+          <div class="batteries-title">Levers of influence</div>
+          <div class="batteries-hint">Click a battery to charge it</div>
+        </div>
+
+        <div class="battery-grid" id="battery-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div class="insight-card">
+        <div class="insight-header">What this system asks of you</div>
+        <div class="insight-row">
+          <div class="drain-dot" style="background:var(--blue-mid)"></div>
+          <div><strong style="color:var(--text)">Prioritisation is constant.</strong> With one charger and six batteries draining at different rates, you are always mid-decision — even when you appear to be resting.</div>
+        </div>
+        <div class="insight-row">
+          <div class="drain-dot" style="background:var(--pink-mid)"></div>
+          <div><strong style="color:var(--text)">Neglect compounds.</strong> A battery that runs flat doesn't just mean one lever fails — it raises the drain rate on others, and can take days to recover.</div>
+        </div>
+        <div class="insight-row">
+          <div class="drain-dot" style="background:var(--yellow-dark)"></div>
+          <div><strong style="color:var(--text)">The ceiling is real, not a feeling.</strong> Pushing past 80% doesn't unlock more capacity — it accelerates drain across all batteries simultaneously.</div>
+        </div>
+        <div class="insight-row">
+          <div class="drain-dot" style="background: #a0c8a0"></div>
+          <div><strong style="color:var(--text)">On good days, things can feel normal.</strong> They are not — you are experiencing the result of careful management. That management is invisible work.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== REFLECTION ====== -->
+  <div id="tab-reflection" class="panel">
+    <div class="reflection-card">
+      <div class="reflection-title">On catastrophe, acceptance, and the 80%</div>
+
+      <div class="reflection-block">
+        <div class="reflection-icon" style="background:var(--pink)">⚠️</div>
+        <div class="reflection-text">
+          <h3>Catastrophic to ignore</h3>
+          <p>Pretending the 80% ceiling doesn't exist — pushing as if capacity is still 100% — doesn't create more output. It collapses the system. Batteries drain to zero. Recovery takes longer. The ceiling isn't cruel; ignoring it is.</p>
+        </div>
+      </div>
+
+      <div class="reflection-block">
+        <div class="reflection-icon" style="background:var(--blue)">💙</div>
+        <div class="reflection-text">
+          <h3>Difficult to accept</h3>
+          <p>80% of a person's full capacity is still an enormous amount of living. But the loss is real, and grief for the lost 20% is not self-pity — it is honest. Acceptance doesn't mean forgetting what was. It means building something true from what is.</p>
+        </div>
+      </div>
+
+      <div class="reflection-block">
+        <div class="reflection-icon" style="background:var(--yellow)">✨</div>
+        <div class="reflection-text">
+          <h3>The invisible expertise</h3>
+          <p>Managing six batteries with one charger, across shifting conditions, under a ceiling others can't see — this is sophisticated, exhausting, ongoing work. It rarely gets recognised. But it is what makes everything else possible.</p>
+        </div>
+      </div>
+
+      <div class="reflection-block">
+        <div class="reflection-icon" style="background:#e8f4e8">🌱</div>
+        <div class="reflection-text">
+          <h3>What good management looks like</h3>
+          <p>Sleep protected. Food prioritised. Movement measured, not maximised. People chosen carefully. Meaning tended. Stress met with tools, not willpower. None of these are luxuries. They are the maintenance schedule of a changed but still running system.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const BATTERIES = [
+    { id: 'sleep', name: 'Quality sleep', emoji: '🌙', drain: 'fast', drainRate: 0.9, color: '#b8d8e8', colorDeep: '#1e4d63', desc: 'Drains fastest — must be prioritised first' },
+    { id: 'food', name: 'Nutrient-dense food', emoji: '🥦', drain: 'medium', drainRate: 0.5, color: '#c8e8c8', colorDeep: '#1a4a1a', desc: 'Steady drain — skipping meals costs more later' },
+    { id: 'exercise', name: 'Safe movement', emoji: '🚶', drain: 'medium', drainRate: 0.45, color: '#f2c4ce', colorDeep: '#8a2d42', desc: 'Paradoxically drains and refills — pacing matters' },
+    { id: 'social', name: 'Supportive people', emoji: '🤝', drain: 'slow', drainRate: 0.3, color: '#d4c8e8', colorDeep: '#3a1e6a', desc: 'Drains slowly — but wrong people drain fast' },
+    { id: 'meaning', name: 'Meaning & purpose', emoji: '🧭', drain: 'slow', drainRate: 0.25, color: '#fef3b4', colorDeep: '#7a6200', desc: 'Low drain when present — costly when absent' },
+    { id: 'stress', name: 'Stress management', emoji: '🧘', drain: 'variable', drainRate: 0.6, color: '#f8dcc8', colorDeep: '#6a3010', desc: 'Variable — external events can spike drain suddenly' },
+  ];
+
+  let state = {
+    levels: {},
+    charging: null,
+    chargeInterval: null,
+    drainInterval: null,
+  };
+
+  // Init levels
+  BATTERIES.forEach(b => {
+    state.levels[b.id] = 45 + Math.floor(Math.random() * 40);
+  });
+
+  function getBatteryColor(level) {
+    if (level > 50) return '#b8d8e8';
+    if (level > 25) return '#f9e06a';
+    return '#e8899a';
+  }
+
+  function getBadgeClass(level, isCharging) {
+    if (isCharging) return 'charging';
+    if (level <= 25) return 'low';
+    return '';
+  }
+
+  function getDrainDotColor(rate) {
+    if (rate >= 0.7) return '#e8899a';
+    if (rate >= 0.45) return '#f9e06a';
+    return '#b8d8e8';
+  }
+
+  function calcCapacity() {
+    const avg = BATTERIES.reduce((sum, b) => sum + state.levels[b.id], 0) / BATTERIES.length;
+    return Math.round(Math.min(80, avg * 0.8));
+  }
+
+  function renderBatteries() {
+    const grid = document.getElementById('battery-grid');
+    grid.innerHTML = '';
+
+    BATTERIES.forEach(b => {
+      const level = Math.round(state.levels[b.id]);
+      const isCharging = state.charging === b.id;
+      const isCritical = level <= 25;
+      const fillColor = isCharging ? '#f9e06a' : getBatteryColor(level);
+      const badgeClass = getBadgeClass(level, isCharging);
+
+      const item = document.createElement('div');
+      item.className = 'battery-item' + (isCharging ? ' charging' : '') + (isCritical && !isCharging ? ' critical' : '');
+      item.onclick = () => selectCharging(b.id);
+
+      item.innerHTML = `
+        <div class="battery-top">
+          <span class="battery-emoji">${b.emoji}</span>
+          <span class="battery-charge-badge ${badgeClass}">${isCharging ? '⚡ charging' : level + '%'}</span>
+        </div>
+        <div class="battery-name">${b.name}</div>
+        <div class="battery-visual">
+          <div class="battery-body">
+            <div class="battery-fill" style="width:${level}%; background:${fillColor}; position:relative; overflow:hidden;">
+              ${isCharging ? '<div class="charging-shimmer"></div>' : ''}
+            </div>
+          </div>
+          <div class="battery-cap"></div>
+        </div>
+        <div class="battery-drain">
+          <span class="drain-dot" style="background:${getDrainDotColor(b.drainRate)}"></span>
+          ${b.drain} drain · ${b.desc}
+        </div>
+        <button class="charge-btn ${isCharging ? 'active' : ''}" onclick="selectCharging('${b.id}'); event.stopPropagation();">
+          ${isCharging ? '⚡ Currently charging' : 'Charge this first'}
+        </button>
+      `;
+      grid.appendChild(item);
+    });
+
+    // Update capacity
+    const cap = calcCapacity();
+    document.getElementById('capacity-fill').style.width = cap + '%';
+    document.getElementById('capacity-display').textContent = cap + '%';
+  }
+
+  function selectCharging(id) {
+    if (state.charging === id) {
+      state.charging = null;
+      document.getElementById('charging-name').textContent = 'Select a battery below to charge it →';
+      document.getElementById('charger-info').textContent = 'Each lever of influence runs on its own battery. Only one can charge at a time. Choose carefully.';
+    } else {
+      state.charging = id;
+      const b = BATTERIES.find(x => x.id === id);
+      document.getElementById('charging-name').textContent = b.emoji + ' ' + b.name + ' is charging…';
+      document.getElementById('charger-info').textContent = b.desc + '. While this charges, the other five continue to drain.';
+    }
+    renderBatteries();
+  }
+
+  function tick() {
+    BATTERIES.forEach(b => {
+      if (b.id === state.charging) {
+        state.levels[b.id] = Math.min(100, state.levels[b.id] + 1.2);
+      } else {
+        state.levels[b.id] = Math.max(0, state.levels[b.id] - b.drainRate * 0.3);
+      }
+    });
+    renderBatteries();
+  }
+
+  function showTab(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+
+    if (name === 'after' && !state.drainInterval) {
+      state.drainInterval = setInterval(tick, 400);
+      renderBatteries();
+    }
+  }
+</script>
+</body>
+</html>
